@@ -52,7 +52,7 @@ from transformers.utils import check_min_version, send_example_telemetry
 from transformers.utils.versions import require_version
 
 
-from bert_SNN_FS import SNNAutoModelForSequenceClassification
+from bert_SNN_LAS import SNNAutoModelForSequenceClassification
 
 
 
