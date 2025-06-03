@@ -69,7 +69,7 @@ def fs_coding(x, h, d, T, K):
     fr = all_spike / neuron_number
     return torch.stack(out)
 
-def fs_relu(x: torch.Tensor, n_neurons=16, v_max=1, return_reg=False, fast=True):
+def mtn(x: torch.Tensor, n_neurons=16, v_max=1, return_reg=False, fast=True):
 
     def generate_params(relu_K=n_neurons, alpha=v_max):
         relu_h = alpha * 2 ** (-relu_K) * np.array([float(2 ** (relu_K - i)) for i in range(1,
@@ -243,13 +243,12 @@ class FsCoding1(nn.Module):
         out = out.view(or_shape) * signs
         return out
 
-
 toSpilke10 = FsCoding10()
 toSpilke50 = FsCoding50()
 toSpilke1 = FsCoding1()
 
 
-def toSpike(ox, fast=True, hight_acc=False, hight_acc_fast=True):
+def OATN(ox, fast=True, hight_acc=False, hight_acc_fast=True):
     x = ox.to(torch.float32)
     with torch.cuda.amp.autocast(enabled=False):
         if fast:
@@ -277,8 +276,8 @@ def toSpike(ox, fast=True, hight_acc=False, hight_acc_fast=True):
                 hidden_states_0_10 = hidden_states[mask_0_10]
                 hidden_states_10_50 = hidden_states[mask_10_50]
 
-                hidden_states_0_10 = fs_relu(hidden_states_0_10, v_max=10, fast=hight_acc_fast)
-                hidden_states_10_50 = fs_relu(hidden_states_10_50, v_max=500, fast=hight_acc_fast)
+                hidden_states_0_10 = mtn(hidden_states_0_10, v_max=10, fast=hight_acc_fast)
+                hidden_states_10_50 = mtn(hidden_states_10_50, v_max=500, fast=hight_acc_fast)
                 result = torch.empty_like(x)
                 result[mask_0_10] = hidden_states_0_10
                 result[mask_10_50] = hidden_states_10_50
@@ -294,8 +293,8 @@ def toSpike(ox, fast=True, hight_acc=False, hight_acc_fast=True):
                 stata_min = hidden_states[mask_pos]
                 stata_max = hidden_states[mask_neg]
 
-                stata_min = fs_relu(stata_min, v_max=10, fast=False)
-                stata_max = fs_relu(stata_max, v_max=500, fast=False)
+                stata_min = mtn(stata_min, v_max=10, fast=False)
+                stata_max = mtn(stata_max, v_max=500, fast=False)
 
                 result = torch.empty_like(x)
 
@@ -317,8 +316,8 @@ def toSpike(ox, fast=True, hight_acc=False, hight_acc_fast=True):
                 stata_pos = hidden_states[mask_pos]
                 stata_neg = hidden_states[mask_neg]
 
-                Spike_pos = fs_relu(stata_pos, v_max=700, fast=hight_acc_fast)  # 13B
-                Spike_neg = fs_relu(stata_neg, v_max=200, fast=hight_acc_fast)
+                Spike_pos = mtn(stata_pos, v_max=700, fast=hight_acc_fast)  # 13B
+                Spike_neg = mtn(stata_neg, v_max=200, fast=hight_acc_fast)
 
                 result = torch.empty_like(x)
 
@@ -331,7 +330,7 @@ def toSpike(ox, fast=True, hight_acc=False, hight_acc_fast=True):
                 return result.to(ox.dtype)
 
 
-def toSpike2(ox, fast=True, hight_acc=False, hight_acc_fast=True, thres1=0, thres2=0):
+def OATN2(ox, fast=True, hight_acc=False, hight_acc_fast=True, thres1=0, thres2=0):
     x = ox.to(torch.float32)
     with torch.cuda.amp.autocast(enabled=False):
         if fast:
@@ -345,8 +344,8 @@ def toSpike2(ox, fast=True, hight_acc=False, hight_acc_fast=True, thres1=0, thre
                 stata_min = hidden_states[mask_pos]
                 stata_max = hidden_states[mask_neg]
 
-                stata_min = fs_relu(stata_min, v_max=thres1, fast=hight_acc_fast)
-                stata_max = fs_relu(stata_max, v_max=thres2, fast=hight_acc_fast)
+                stata_min = mtn(stata_min, v_max=thres1, fast=hight_acc_fast)
+                stata_max = mtn(stata_max, v_max=thres2, fast=hight_acc_fast)
 
                 result = torch.empty_like(x)
 
@@ -362,8 +361,8 @@ def toSpike2(ox, fast=True, hight_acc=False, hight_acc_fast=True, thres1=0, thre
             hidden_states_0_10 = hidden_states[mask_0_10]
             hidden_states_10_50 = hidden_states[mask_10_50]
 
-            hidden_states_0_10 = fs_relu(hidden_states_0_10, v_max=10, fast=hight_acc_fast)
-            hidden_states_10_50 = fs_relu(hidden_states_10_50, v_max=500, fast=hight_acc_fast)
+            hidden_states_0_10 = mtn(hidden_states_0_10, v_max=10, fast=hight_acc_fast)
+            hidden_states_10_50 = mtn(hidden_states_10_50, v_max=500, fast=hight_acc_fast)
             result = torch.empty_like(x)
             result[mask_0_10] = hidden_states_0_10
             result[mask_10_50] = hidden_states_10_50
@@ -381,8 +380,8 @@ def toSpike2(ox, fast=True, hight_acc=False, hight_acc_fast=True, thres1=0, thre
                     stata_min = hidden_states[mask_pos]
                     stata_max = hidden_states[mask_neg]
 
-                    stata_min = fs_relu(stata_min, v_max=thres1, fast=False)
-                    stata_max = fs_relu(stata_max, v_max=thres2, fast=False)
+                    stata_min = mtn(stata_min, v_max=thres1, fast=False)
+                    stata_max = mtn(stata_max, v_max=thres2, fast=False)
 
                     result = torch.empty_like(x)
 
@@ -403,8 +402,8 @@ def toSpike2(ox, fast=True, hight_acc=False, hight_acc_fast=True, thres1=0, thre
                     stata_min = hidden_states[mask_pos]
                     stata_max = hidden_states[mask_neg]
 
-                    stata_min = fs_relu(stata_min, v_max=10, fast=False)
-                    stata_max = fs_relu(stata_max, v_max=500, fast=False)
+                    stata_min = mtn(stata_min, v_max=10, fast=False)
+                    stata_max = mtn(stata_max, v_max=500, fast=False)
 
                     result = torch.empty_like(x)
 
@@ -426,8 +425,8 @@ def toSpike2(ox, fast=True, hight_acc=False, hight_acc_fast=True, thres1=0, thre
                 stata_pos = hidden_states[mask_pos]
                 stata_neg = hidden_states[mask_neg]
 
-                Spike_pos = fs_relu(stata_pos, v_max=700, fast=hight_acc_fast)
-                Spike_neg = fs_relu(stata_neg, v_max=200, fast=hight_acc_fast)
+                Spike_pos = mtn(stata_pos, v_max=700, fast=hight_acc_fast)
+                Spike_neg = mtn(stata_neg, v_max=200, fast=hight_acc_fast)
 
 
 
@@ -442,19 +441,6 @@ def toSpike2(ox, fast=True, hight_acc=False, hight_acc_fast=True, thres1=0, thre
                 return result.to(ox.dtype)
 
 
-
-class TestNeuron(nn.Module):
-    def __init__(self, place=None, percent=None):
-        super(TestNeuron, self).__init__()
-        self.place = place
-        self.percent = percent
-        self.num = 0
-
-    def forward(self, x, times=2, gap=3, show=0, tmptime=0, scaletimes=1):
-        return x
-
-    def reset(self):
-        pass
 
 class spike_softmax(nn.Module):
     def __init__(self, ):
@@ -501,7 +487,7 @@ class spikeLN(nn.Module):
             W_var = torch.full((n, 1), 1 / n).to(device=input.device)
             rmvmean = (inputs @ W_rmvmean)
 
-            rmvmean = toSpike(rmvmean, fast=False, hight_acc=True, hight_acc_fast=False)
+            rmvmean = OATN(rmvmean, fast=False, hight_acc=True, hight_acc_fast=False)
 
             vars = get_squre(rmvmean.sum(0))
 
@@ -510,7 +496,7 @@ class spikeLN(nn.Module):
             sqr = get_sqr(var, fast=False)
             sqrinv = invert_tensor_precise(sqr.sum(0),fast=False)
             prod = SNNMACOperater(rmvmean, sqrinv)
-            prod = toSpike2(prod, fast=False, thres1=2, thres2=50)
+            prod = OATN2(prod, fast=False, thres1=2, thres2=50)
             prod = prod.sum(0)
 
         norm = prod * gamma + beta
@@ -606,7 +592,7 @@ class BertEncoder(nn.Module):
         all_self_attentions = () if output_attentions else None
         all_cross_attentions = () if output_attentions and self.config.add_cross_attention else None
 
-        if self.gradient_checkpointing and self.training:   # 无
+        if self.gradient_checkpointing and self.training:   #
             if use_cache:
                 logger.warning_once(
                     "`use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`..."
@@ -685,7 +671,7 @@ class BertIntermediate(nn.Module):
 
 
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        hidden_states = toSpike2(hidden_states, fast=False)
+        hidden_states = OATN2(hidden_states, fast=False)
         hidden_states = hidden_states.sum(0)
 
         hidden_states = self.dense(hidden_states)
@@ -703,7 +689,7 @@ class BertOutput(nn.Module):
         self.spike_ln = spikeLN()
 
     def forward(self, hidden_states: torch.Tensor, input_tensor: torch.Tensor) -> torch.Tensor:
-        hidden_states = toSpike(hidden_states, fast=False)
+        hidden_states = OATN(hidden_states, fast=False)
         hidden_states = hidden_states.sum(0)
 
         hidden_states = self.dense(hidden_states)
@@ -760,7 +746,7 @@ class BertSelfAttention(nn.Module):
         past_key_value: Optional[Tuple[Tuple[torch.FloatTensor]]] = None,
         output_attentions: Optional[bool] = False,
     ) -> Tuple[torch.Tensor]:
-        hidden_states = toSpike2(hidden_states,fast=False)
+        hidden_states = OATN2(hidden_states,fast=False)
 
         hidden_states = hidden_states.sum(0)
 
@@ -791,9 +777,9 @@ class BertSelfAttention(nn.Module):
 
         query_layer = self.transpose_for_scores(mixed_query_layer)
 
-        query_layer = toSpike(query_layer, fast=False)
-        key_layer = toSpike(key_layer, fast=False)
-        value_layer = toSpike(value_layer, fast=False)
+        query_layer = OATN(query_layer, fast=False)
+        key_layer = OATN(key_layer, fast=False)
+        value_layer = OATN(value_layer, fast=False)
 
         use_cache = past_key_value is not None
         if self.is_decoder:
@@ -854,7 +840,7 @@ class BertSelfAttention(nn.Module):
         # seem a bit unusual, but is taken from the original Transformer paper.
         attention_probs = self.dropout(attention_probs)
 
-        attention_probs = fs_relu(attention_probs, fast=False)
+        attention_probs = mtn(attention_probs, fast=False)
 
         # Mask heads if we want to
         if head_mask is not None:
@@ -883,7 +869,7 @@ class BertSelfOutput(nn.Module):
         self.spike_ln = spikeLN()
 
     def forward(self, hidden_states: torch.Tensor, input_tensor: torch.Tensor) -> torch.Tensor:
-        hidden_states = toSpike2(hidden_states, fast=False)
+        hidden_states = OATN2(hidden_states, fast=False)
         hidden_states = hidden_states.sum(0)
 
         hidden_states = self.dense(hidden_states)

@@ -31,7 +31,6 @@ import evaluate
 import numpy as np
 from datasets import load_dataset
 import torch
-from layer2 import IF
 
 import transformers
 from transformers import (
