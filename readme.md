@@ -67,7 +67,7 @@ python run_glue.py \
 ```bash
 export TASK_NAME=sst2
 
-python run_glue_FS.py \
+python run_glue_LAS.py \
   --model_name_or_path /tmp/$TASK_NAME/ \
   --task_name $TASK_NAME \
   --do_eval \
