@@ -28,6 +28,8 @@ We have uploaded the pre-trained BERT checkpoints used in the paper to Hugging F
 | MRPC | lgccccc/bert-las-mrpc    | [Link](https://huggingface.co/lgccccc/bert-las-mrpc) |
 | STSB | lgccccc/bert-las-stsb    | [Link](https://huggingface.co/lgccccc/bert-las-stsb) |
 
+you can load the models by simply replacing `model_name_or_path` in the following command-line instructions with the corresponding Hugging Face model name. 
+Alternatively, you can download the files directly from the “Files and versions” tab on each model page, or clone the entire repository using Git LFS, e.g., git lfs install && git clone https://huggingface.co/lgccccc/bert-las-qqp.
 ## Get BERT Model
 
 ```bash
