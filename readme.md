@@ -16,6 +16,17 @@ This is the code implementation for the paper "LAS: Loss-less ANN-SNN Conversion
 - `protobuf`
 - `evaluate`
 - `scikit-learn`
+## Checkpoints 
+We have uploaded the pre-trained BERT checkpoints used in the paper to Hugging Face.
+| Task | Hugging Face Model Name | Link |
+|------|--------------------------|------|
+| QQP  | lgccccc/bert-las-qqp     | [Link](https://huggingface.co/lgccccc/bert-las-qqp) |
+| MNLI | lgccccc/bert-las-mnli    | [Link](https://huggingface.co/lgccccc/bert-las-mnli) |
+| SST2 | lgccccc/bert-las-sst2    | [Link](https://huggingface.co/lgccccc/bert-las-sst2) |
+| QNLI | lgccccc/bert-las-qnli    | [Link](https://huggingface.co/lgccccc/bert-las-qnli) |
+| RTE  | lgccccc/bert-las-rte     | [Link](https://huggingface.co/lgccccc/bert-las-rte) |
+| MRPC | lgccccc/bert-las-mrpc    | [Link](https://huggingface.co/lgccccc/bert-las-mrpc) |
+| STSB | lgccccc/bert-las-stsb    | [Link](https://huggingface.co/lgccccc/bert-las-stsb) |
 
 ## Get BERT Model
 
