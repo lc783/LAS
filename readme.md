@@ -96,7 +96,26 @@ python run_glue_LAS.py \
   --fp16_full_eval
 ```
 
+## Multimodal
+
+```
+cd multimodal/LLaMA-Factory
+pip install -e .
+
+cd multimodal/evalscope
+pip install -e .
+```
+
+Run
+
+```
+API_PORT=8000 CUDA_VISIBLE_DEVICES=0 llamafactory-cli api examples/inference/llava1_5.yaml
+
+python evalscope/run_eval.py
+```
+
 ## Reference
+
 ```
 @article{chen2025loss,
   title={LAS: Loss-less ANN-SNN Conversion for Fully Spike-Driven Large Language Models},

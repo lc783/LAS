@@ -1,0 +1,29 @@
+accelerate
+datasets>=3.0.0,<=3.2.0
+immutabledict
+jieba
+jsonlines
+langdetect
+latex2sympy2
+matplotlib
+modelscope[framework]
+nltk>=3.9
+openai
+pandas
+pyarrow
+pyyaml
+requests
+rouge-chinese
+rouge-score>=0.1.0
+sacrebleu
+scikit-learn
+seaborn
+# for evaluation
+sympy
+# streamlit
+tabulate
+# pip3 install --no-dependencies -r requirements/framework.txt
+torch
+tqdm
+transformers>=4.33
+word2number
