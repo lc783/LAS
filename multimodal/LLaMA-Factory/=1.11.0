@@ -1,0 +1,7 @@
+Requirement already satisfied: modelscope in /home/longchen/miniconda3/envs/llamafact/lib/python3.10/site-packages (1.20.0)
+Requirement already satisfied: requests>=2.25 in /home/longchen/miniconda3/envs/llamafact/lib/python3.10/site-packages (from modelscope) (2.32.3)
+Requirement already satisfied: tqdm>=4.64.0 in /home/longchen/miniconda3/envs/llamafact/lib/python3.10/site-packages (from modelscope) (4.67.0)
+Requirement already satisfied: urllib3>=1.26 in /home/longchen/miniconda3/envs/llamafact/lib/python3.10/site-packages (from modelscope) (2.2.3)
+Requirement already satisfied: charset-normalizer<4,>=2 in /home/longchen/miniconda3/envs/llamafact/lib/python3.10/site-packages (from requests>=2.25->modelscope) (3.4.0)
+Requirement already satisfied: idna<4,>=2.5 in /home/longchen/miniconda3/envs/llamafact/lib/python3.10/site-packages (from requests>=2.25->modelscope) (3.10)
+Requirement already satisfied: certifi>=2017.4.17 in /home/longchen/miniconda3/envs/llamafact/lib/python3.10/site-packages (from requests>=2.25->modelscope) (2024.8.30)
